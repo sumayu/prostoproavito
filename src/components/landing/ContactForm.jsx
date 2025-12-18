@@ -92,7 +92,16 @@ export default function ContactForm() {
               </div>
 
               {/* Form */}
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form 
+                name="lead" 
+                method="POST" 
+                data-netlify="true"
+                data-netlify-honeypot="bot-field"
+                onSubmit={handleSubmit} 
+                className="space-y-5"
+              >
+                <input type="hidden" name="form-name" value="lead" />
+                <input type="hidden" name="bot-field" />
                 {/* Контакт партнера */}
                 <div className="relative">
                   <label htmlFor="partnerContact" className="sr-only">Контакт партнера</label>
