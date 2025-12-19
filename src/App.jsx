@@ -50,7 +50,7 @@ export default function Home() {
 
     // Canonical URL - без параметров для избежания дублей
     const canonical = document.querySelector('link[rel="canonical"]');
-    const canonicalUrl = window.location.origin + window.location.pathname;
+    const canonicalUrl = 'https://prostoproavito.ru/';
     if (!canonical) {
       const link = document.createElement('link');
       link.rel = 'canonical';
