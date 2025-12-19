@@ -4,14 +4,7 @@ export async function handler(event) {
   try {
     const data = JSON.parse(event.body);
 
-    // Проверяем секретный код
-    const secretCode = process.env.LEAD_SECRET_CODE; // должен быть в env
-    if (!data.secret || data.secret !== secretCode) {
-      return {
-        statusCode: 403,
-        body: JSON.stringify({ error: "Forbidden: invalid secret" }),
-      };
-    }
+    // Убрана проверка секретного кода
 
     const text = `
 🆕 Новая заявка с сайта

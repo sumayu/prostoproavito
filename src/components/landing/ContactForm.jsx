@@ -3,7 +3,13 @@ import { motion } from 'framer-motion';
 import {
   ArrowRight,
   Send,
-  CheckCircle
+  CheckCircle,
+  User,
+  Phone,
+  MessageCircle,
+  Briefcase,
+  DollarSign,
+  Calendar
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +29,6 @@ export default function ContactForm() {
     leadsPerMonth: '',
     meetingDate: ''
   });
-
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e) => {
@@ -66,11 +71,12 @@ export default function ContactForm() {
       setIsSubmitted(true);
       toast.success("Заявка отправлена! Менеджер свяжется с вами");
 
-      // аналитика (если подключишь)
       if (window.gtag) {
-        window.gtag("event", "lead_submit");
+        window.gtag("event", "lead_submit", {
+          event_category: "form",
+          event_label: "avito_lead"
+        });
       }
-
     } catch {
       toast.error("Ошибка отправки. Попробуйте позже");
     }
@@ -103,7 +109,7 @@ export default function ContactForm() {
                   </span>
                 </h2>
                 <p className="text-gray-400 max-w-xl mx-auto">
-                  Заявка сразу сохраняется в системе
+                  Лид сразу сохраняется в системе
                 </p>
               </div>
 
@@ -115,67 +121,112 @@ export default function ContactForm() {
                 onSubmit={handleSubmit}
                 className="space-y-5"
               >
-                {/* Обязательные скрытые поля для Netlify */}
                 <input type="hidden" name="form-name" value="lead" />
                 <input type="hidden" name="bot-field" />
-                <input type="hidden" name="__function" value="lead" />
 
-                <Input
-                  name="partnerContact"
-                  placeholder="Контакт партнера *"
-                  value={formData.partnerContact}
-                  onChange={handleChange}
-                />
-
-                <div className="grid md:grid-cols-2 gap-5">
+                <div className="relative">
+                  <label htmlFor="partnerContact" className="sr-only">Контакт партнёра</label>
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
                   <Input
-                    name="clientName"
-                    placeholder="Имя клиента *"
-                    value={formData.clientName}
+                    id="partnerContact"
+                    name="partnerContact"
+                    placeholder="Контакт партнёра *"
+                    value={formData.partnerContact}
                     onChange={handleChange}
-                  />
-                  <Input
-                    name="clientPhone"
-                    placeholder="Телефон клиента *"
-                    value={formData.clientPhone}
-                    onChange={handleChange}
+                    required
+                    aria-required="true"
+                    className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
                   />
                 </div>
 
-                <Input
-                  name="clientTelegram"
-                  placeholder="Telegram клиента"
-                  value={formData.clientTelegram}
-                  onChange={handleChange}
-                />
+                <div className="grid md:grid-cols-2 gap-5">
+                  <div className="relative">
+                    <label htmlFor="clientName" className="sr-only">Имя клиента</label>
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
+                    <Input
+                      id="clientName"
+                      name="clientName"
+                      placeholder="Имя клиента *"
+                      value={formData.clientName}
+                      onChange={handleChange}
+                      required
+                      aria-required="true"
+                      className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
+                    />
+                  </div>
+
+                  <div className="relative">
+                    <label htmlFor="clientPhone" className="sr-only">Телефон клиента</label>
+                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
+                    <Input
+                      id="clientPhone"
+                      name="clientPhone"
+                      type="tel"
+                      placeholder="Телефон клиента *"
+                      value={formData.clientPhone}
+                      onChange={handleChange}
+                      required
+                      aria-required="true"
+                      className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
+                    />
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <label htmlFor="clientTelegram" className="sr-only">Telegram клиента</label>
+                  <MessageCircle className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
+                  <Input
+                    id="clientTelegram"
+                    name="clientTelegram"
+                    placeholder="Telegram клиента"
+                    value={formData.clientTelegram}
+                    onChange={handleChange}
+                    className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
+                  />
+                </div>
 
                 <div className="grid md:grid-cols-2 gap-5">
-                  <Input
-                    name="productOnAvito"
-                    placeholder="Что продаёт на Авито? *"
-                    value={formData.productOnAvito}
-                    onChange={handleChange}
-                  />
-                  <Input
-                    name="averageCheck"
-                    placeholder="Средний чек *"
-                    value={formData.averageCheck}
-                    onChange={handleChange}
-                  />
+                  <div className="relative">
+                    <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
+                    <Input
+                      name="productOnAvito"
+                      placeholder="Что продаёт на Авито? *"
+                      value={formData.productOnAvito}
+                      onChange={handleChange}
+                      required
+                      className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
+                    />
+                  </div>
+
+                  <div className="relative">
+                    <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
+                    <Input
+                      name="averageCheck"
+                      placeholder="Средний чек *"
+                      value={formData.averageCheck}
+                      onChange={handleChange}
+                      required
+                      className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
+                    />
+                  </div>
                 </div>
 
                 <Textarea
                   name="avitoExperience"
-                  placeholder="Опыт работы с Авито *"
+                  placeholder="Какой опыт работы с Авито? *"
                   value={formData.avitoExperience}
                   onChange={handleChange}
+                  rows={3}
+                  className="w-full p-4 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20 resize-none"
                 />
 
                 <Textarea
                   name="currentDifficulty"
-                  placeholder="Текущая проблема / запрос *"
+                  placeholder="В чем сейчас сложность с Авито / какой запрос? *"
                   value={formData.currentDifficulty}
                   onChange={handleChange}
+                  rows={3}
+                  className="w-full p-4 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20 resize-none"
                 />
 
                 <div className="grid md:grid-cols-2 gap-5">
@@ -184,36 +235,66 @@ export default function ContactForm() {
                     placeholder="Сколько заявок нужно в месяц? *"
                     value={formData.leadsPerMonth}
                     onChange={handleChange}
+                    required
+                    className="w-full py-6 px-4 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
                   />
-                  <Input
-                    type="date"
-                    name="meetingDate"
-                    value={formData.meetingDate}
-                    onChange={handleChange}
-                  />
+                  <div className="relative">
+                    <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
+                    <Input
+                      name="meetingDate"
+                      type="date"
+                      placeholder="Удобный день для зум встречи *"
+                      value={formData.meetingDate}
+                      onChange={handleChange}
+                      required
+                      className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
+                    />
+                  </div>
                 </div>
 
-                <Button type="submit" size="lg" className="w-full">
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-lg py-6 rounded-xl shadow-lg shadow-orange-500/25 transition-all duration-300 hover:shadow-orange-500/40"
+                >
                   <Send className="mr-2 w-5 h-5" />
                   Отправить заявку
                 </Button>
+
+                <p className="text-xs text-center text-gray-500">
+                  * — обязательные поля
+                </p>
               </form>
             </>
           ) : (
-            <div className="text-center py-8">
-              <CheckCircle className="w-12 h-12 mx-auto text-green-400 mb-4" />
-              <h3 className="text-2xl font-bold text-white">Заявка принята!</h3>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-center py-8"
+            >
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-green-500/20 flex items-center justify-center">
+                <CheckCircle className="w-10 h-10 text-green-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">
+                Заявка принята!
+              </h3>
+              <p className="text-gray-400 mb-8">
+                Для получения бесплатного разбора напишите нам в Telegram
+              </p>
               <a
                 href="https://t.me/Sumaaar"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button className="mt-6">
-                  Написать в Telegram
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-lg px-8 py-6 rounded-xl"
+                >
+                  Написать в Telegram — @Sumaaar
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </a>
-            </div>
+            </motion.div>
           )}
         </motion.div>
       </div>
