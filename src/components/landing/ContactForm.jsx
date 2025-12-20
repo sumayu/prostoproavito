@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import {
   ArrowRight,
   Send,
@@ -9,8 +9,8 @@ import {
   MessageCircle,
   Briefcase,
   DollarSign,
-  Calendar
-} from 'lucide-react';
+  Calendar,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,76 +18,78 @@ import { toast } from "sonner";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
-    partnerContact: '',
-    clientName: '',
-    clientPhone: '',
-    clientTelegram: '',
-    productOnAvito: '',
-    averageCheck: '',
-    avitoExperience: '',
-    currentDifficulty: '',
-    leadsPerMonth: '',
-    meetingDate: ''
+    partnerContact: "",
+    clientName: "",
+    clientPhone: "",
+    clientTelegram: "",
+    productOnAvito: "",
+    averageCheck: "",
+    avitoExperience: "",
+    currentDifficulty: "",
+    leadsPerMonth: "",
+    meetingDate: "",
   });
+
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
+    setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // ⬅️ ВСЕГДА первым
 
     const requiredFields = [
-      'partnerContact',
-      'clientName',
-      'clientPhone',
-      'productOnAvito',
-      'averageCheck',
-      'avitoExperience',
-      'currentDifficulty',
-      'leadsPerMonth',
-      'meetingDate'
+      "partnerContact",
+      "clientName",
+      "clientPhone",
+      "productOnAvito",
+      "averageCheck",
+      "avitoExperience",
+      "currentDifficulty",
+      "leadsPerMonth",
+      "meetingDate",
     ];
 
-    const missing = requiredFields.filter(f => !formData[f]);
+    const missing = requiredFields.filter((f) => !formData[f]);
     if (missing.length) {
       toast.error("Пожалуйста, заполните все обязательные поля");
       return;
     }
 
     try {
-      const form = e.target;
-      const data = new FormData(form);
+      setLoading(true);
 
-      await fetch("/", {
+      const res = await fetch("/.netlify/functions/lead", {
         method: "POST",
-        body: data
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
+      if (!res.ok) {
+        throw new Error("Request failed");
+      }
+
       setIsSubmitted(true);
-      toast.success("Заявка отправлена! Менеджер свяжется с вами");
+      toast.success("Заявка отправлена!");
 
       if (window.gtag) {
         window.gtag("event", "lead_submit", {
           event_category: "form",
-          event_label: "avito_lead"
+          event_label: "avito_lead",
         });
       }
-    } catch {
+    } catch (err) {
+      console.error(err);
       toast.error("Ошибка отправки. Попробуйте позже");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <section id="contact" className="relative py-24 px-4 overflow-hidden">
-      <div className="absolute inset-0 bg-[#0a0a0f]" />
-
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-orange-500/10 to-transparent rounded-full blur-[100px]" />
-
+    <section id="contact" className="relative py-24 px-4">
       <div className="relative z-10 max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -99,202 +101,40 @@ export default function ContactForm() {
           {!isSubmitted ? (
             <>
               <div className="text-center mb-10">
-                <span className="inline-block px-4 py-1 text-sm font-medium rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 mb-4">
-                  Партнерская лид-форма
-                </span>
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                  Заявка на{' '}
-                  <span className="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
-                    сопровождение
-                  </span>
+                <h2 className="text-3xl font-bold text-white">
+                  Заявка на сопровождение
                 </h2>
-                <p className="text-gray-400 max-w-xl mx-auto">
-                  Лид сразу сохраняется в системе
-                </p>
               </div>
 
-              <form
-                name="lead"
-                method="POST"
-                data-netlify="true"
-                data-netlify-honeypot="bot-field"
-                onSubmit={handleSubmit}
-                className="space-y-5"
-              >
-                <input type="hidden" name="form-name" value="lead" />
-                <input type="hidden" name="bot-field" />
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <Input name="partnerContact" placeholder="Контакт партнёра *" value={formData.partnerContact} onChange={handleChange} />
+                <Input name="clientName" placeholder="Имя клиента *" value={formData.clientName} onChange={handleChange} />
+                <Input name="clientPhone" placeholder="Телефон клиента *" value={formData.clientPhone} onChange={handleChange} />
+                <Input name="clientTelegram" placeholder="Telegram клиента" value={formData.clientTelegram} onChange={handleChange} />
+                <Input name="productOnAvito" placeholder="Что продаёт на Авито? *" value={formData.productOnAvito} onChange={handleChange} />
+                <Input name="averageCheck" placeholder="Средний чек *" value={formData.averageCheck} onChange={handleChange} />
+                <Textarea name="avitoExperience" placeholder="Опыт работы с Авито *" value={formData.avitoExperience} onChange={handleChange} />
+                <Textarea name="currentDifficulty" placeholder="Текущая проблема *" value={formData.currentDifficulty} onChange={handleChange} />
+                <Input name="leadsPerMonth" placeholder="Сколько лидов в месяц? *" value={formData.leadsPerMonth} onChange={handleChange} />
+                <Input type="date" name="meetingDate" value={formData.meetingDate} onChange={handleChange} />
 
-                <div className="relative">
-                  <label htmlFor="partnerContact" className="sr-only">Контакт партнёра</label>
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
-                  <Input
-                    id="partnerContact"
-                    name="partnerContact"
-                    placeholder="Контакт партнёра *"
-                    value={formData.partnerContact}
-                    onChange={handleChange}
-                    required
-                    aria-required="true"
-                    className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
-                  />
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-5">
-                  <div className="relative">
-                    <label htmlFor="clientName" className="sr-only">Имя клиента</label>
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
-                    <Input
-                      id="clientName"
-                      name="clientName"
-                      placeholder="Имя клиента *"
-                      value={formData.clientName}
-                      onChange={handleChange}
-                      required
-                      aria-required="true"
-                      className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
-                    />
-                  </div>
-
-                  <div className="relative">
-                    <label htmlFor="clientPhone" className="sr-only">Телефон клиента</label>
-                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
-                    <Input
-                      id="clientPhone"
-                      name="clientPhone"
-                      type="tel"
-                      placeholder="Телефон клиента *"
-                      value={formData.clientPhone}
-                      onChange={handleChange}
-                      required
-                      aria-required="true"
-                      className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
-                    />
-                  </div>
-                </div>
-
-                <div className="relative">
-                  <label htmlFor="clientTelegram" className="sr-only">Telegram клиента</label>
-                  <MessageCircle className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
-                  <Input
-                    id="clientTelegram"
-                    name="clientTelegram"
-                    placeholder="Telegram клиента"
-                    value={formData.clientTelegram}
-                    onChange={handleChange}
-                    className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
-                  />
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-5">
-                  <div className="relative">
-                    <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
-                    <Input
-                      name="productOnAvito"
-                      placeholder="Что продаёт на Авито? *"
-                      value={formData.productOnAvito}
-                      onChange={handleChange}
-                      required
-                      className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
-                    />
-                  </div>
-
-                  <div className="relative">
-                    <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
-                    <Input
-                      name="averageCheck"
-                      placeholder="Средний чек *"
-                      value={formData.averageCheck}
-                      onChange={handleChange}
-                      required
-                      className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
-                    />
-                  </div>
-                </div>
-
-                <Textarea
-                  name="avitoExperience"
-                  placeholder="Какой опыт работы с Авито? *"
-                  value={formData.avitoExperience}
-                  onChange={handleChange}
-                  rows={3}
-                  className="w-full p-4 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20 resize-none"
-                />
-
-                <Textarea
-                  name="currentDifficulty"
-                  placeholder="В чем сейчас сложность с Авито / какой запрос? *"
-                  value={formData.currentDifficulty}
-                  onChange={handleChange}
-                  rows={3}
-                  className="w-full p-4 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20 resize-none"
-                />
-
-                <div className="grid md:grid-cols-2 gap-5">
-                  <Input
-                    name="leadsPerMonth"
-                    placeholder="Сколько заявок нужно в месяц? *"
-                    value={formData.leadsPerMonth}
-                    onChange={handleChange}
-                    required
-                    className="w-full py-6 px-4 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
-                  />
-                  <div className="relative">
-                    <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
-                    <Input
-                      name="meetingDate"
-                      type="date"
-                      placeholder="Удобный день для зум встречи *"
-                      value={formData.meetingDate}
-                      onChange={handleChange}
-                      required
-                      className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
-                    />
-                  </div>
-                </div>
-
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-lg py-6 rounded-xl shadow-lg shadow-orange-500/25 transition-all duration-300 hover:shadow-orange-500/40"
-                >
+                <Button type="submit" size="lg" className="w-full" disabled={loading}>
                   <Send className="mr-2 w-5 h-5" />
-                  Отправить заявку
+                  {loading ? "Отправка..." : "Отправить заявку"}
                 </Button>
-
-                <p className="text-xs text-center text-gray-500">
-                  * — обязательные поля
-                </p>
               </form>
             </>
           ) : (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-center py-8"
-            >
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-green-500/20 flex items-center justify-center">
-                <CheckCircle className="w-10 h-10 text-green-400" />
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-4">
-                Заявка принята!
-              </h3>
-              <p className="text-gray-400 mb-8">
-                Для получения бесплатного разбора напишите нам в Telegram
-              </p>
-              <a
-                href="https://t.me/Sumaaar"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-lg px-8 py-6 rounded-xl"
-                >
-                  Написать в Telegram — @Sumaaar
+            <div className="text-center py-8">
+              <CheckCircle className="w-12 h-12 mx-auto text-green-400 mb-4" />
+              <h3 className="text-2xl font-bold text-white">Заявка принята!</h3>
+              <a href="https://t.me/Sumaaar" target="_blank" rel="noreferrer">
+                <Button className="mt-6">
+                  Написать в Telegram
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </a>
-            </motion.div>
+            </div>
           )}
         </motion.div>
       </div>
