@@ -1,7 +1,7 @@
 import { Client } from "pg";
 
 const client = new Client({
-connectionString: process.env.NETLIFY_DATABASE_URL,
+  connectionString: process.env.NETLIFY_DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
 
@@ -16,10 +16,9 @@ export async function handler(event) {
 
     const data = JSON.parse(event.body);
 
-    // 🔹 запись в БД
+    // 1️⃣ сохраняем в БД
     await client.query(
-      `
-      insert into leads (
+      `insert into leads (
         partner_contact,
         client_name,
         client_phone,
@@ -30,8 +29,7 @@ export async function handler(event) {
         current_difficulty,
         leads_per_month,
         meeting_date
-      ) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
-      `,
+      ) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
       [
         data.partnerContact,
         data.clientName,
@@ -46,13 +44,28 @@ export async function handler(event) {
       ]
     );
 
-    // 🔹 Telegram
+    // 2️⃣ отправляем TG уведомление
+    const text = `
+🆕 *Новая заявка*
+
+👤 Клиент: ${data.clientName}
+📞 Телефон: ${data.clientPhone}
+💬 Telegram: ${data.clientTelegram || "—"}
+📦 Товар: ${data.productOnAvito}
+💰 Чек: ${data.averageCheck}
+📊 Опыт: ${data.avitoExperience}
+⚠️ Запрос: ${data.currentDifficulty}
+📈 Лидов/мес: ${data.leadsPerMonth}
+📅 Встреча: ${data.meetingDate}
+    `;
+
     await fetch(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chat_id: process.env.TG_CHAT_ID,
-        text: `🆕 Новая заявка\n\n👤 ${data.clientName}\n📞 ${data.clientPhone}`
+        text,
+        parse_mode: "Markdown"
       })
     });
 
