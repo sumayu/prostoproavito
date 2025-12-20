@@ -42,7 +42,6 @@ const handleSubmit = async (e) => {
   e.preventDefault(); // ⬅️ СТРОГО ПЕРВОЙ СТРОКОЙ
 
   const requiredFields = [
-    'partnerContact',
     'clientName',
     'clientPhone',
     'productOnAvito',
@@ -119,20 +118,7 @@ const handleSubmit = async (e) => {
                 className="space-y-5"
               >
 
-                <div className="relative">
-                  <label htmlFor="partnerContact" className="sr-only">Контакт партнёра</label>
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
-                  <Input
-                    id="partnerContact"
-                    name="partnerContact"
-                    placeholder="Контакт партнёра *"
-                    value={formData.partnerContact}
-                    onChange={handleChange}
-                    required
-                    aria-required="true"
-                    className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
-                  />
-                </div>
+     
 
                 <div className="grid md:grid-cols-2 gap-5">
                   <div className="relative">
@@ -141,7 +127,7 @@ const handleSubmit = async (e) => {
                     <Input
                       id="clientName"
                       name="clientName"
-                      placeholder="Имя клиента *"
+                      placeholder="Имя*"
                       value={formData.clientName}
                       onChange={handleChange}
                       required
@@ -157,7 +143,7 @@ const handleSubmit = async (e) => {
                       id="clientPhone"
                       name="clientPhone"
                       type="tel"
-                      placeholder="Телефон клиента *"
+                      placeholder="Телефон *"
                       value={formData.clientPhone}
                       onChange={handleChange}
                       required
@@ -173,7 +159,7 @@ const handleSubmit = async (e) => {
                   <Input
                     id="clientTelegram"
                     name="clientTelegram"
-                    placeholder="Telegram клиента"
+                    placeholder="Telegram"
                     value={formData.clientTelegram}
                     onChange={handleChange}
                     className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
@@ -185,7 +171,7 @@ const handleSubmit = async (e) => {
                     <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
                     <Input
                       name="productOnAvito"
-                      placeholder="Что продаёт на Авито? *"
+                      placeholder="Что продаете на Авито? *"
                       value={formData.productOnAvito}
                       onChange={handleChange}
                       required
@@ -233,18 +219,24 @@ const handleSubmit = async (e) => {
                     required
                     className="w-full py-6 px-4 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
                   />
-                  <div className="relative">
-                    <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
-                    <Input
-                      name="meetingDate"
-                      type="date"
-                      placeholder="Удобный день для зум встречи *"
-                      value={formData.meetingDate}
-                      onChange={handleChange}
-                      required
-                      className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
-                    />
-                  </div>
+               <div className="relative">
+  <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none" />
+
+  <Input
+    name="meetingDate"
+    type="text"
+    placeholder="Удобный день для Zoom-встречи *"
+    value={formData.meetingDate}
+    onFocus={(e) => (e.target.type = "date")}
+    onBlur={(e) => {
+      if (!e.target.value) e.target.type = "text";
+    }}
+    onChange={handleChange}
+    required
+    className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
+  />
+</div>
+
                 </div>
 
                 <Button
