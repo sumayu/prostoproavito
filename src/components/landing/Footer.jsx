@@ -35,7 +35,7 @@ export default function Footer() {
 
           {/* Copyright */}
           <div className="text-gray-500 text-sm text-center md:text-right">
-            © {currentYear} Все права защищены
+            © {currentYear} Сервис не является официальным партнёром Авито
           </div>
         </div>
       </div>
