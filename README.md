@@ -1,4 +1,5 @@
 https://prostoproavito.ru/
+заявки с сайта сохраняются в бд и из бд они передаются в тг бота тем людям у которых есть к нему доступ
 <img width="317" height="243" alt="image" src="https://github.com/user-attachments/assets/1f3bf2a1-6fd5-4a00-93c7-e694867773fe" />
 
 # prostoproavito
