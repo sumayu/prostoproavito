@@ -1,4 +1,6 @@
 https://prostoproavito.ru/
+<img width="317" height="243" alt="image" src="https://github.com/user-attachments/assets/1f3bf2a1-6fd5-4a00-93c7-e694867773fe" />
+
 # prostoproavito
 ✔ готовый шаблон статического SEO-HTML для твоей страницы
 ✔ robots.txt + sitemap.xml, которые можно просто залить
