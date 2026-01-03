@@ -78,20 +78,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.4 }}
         >
-          <a
-            href="https://t.me/Sumaaar"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Написать в Telegram для консультации"
-          >
-            <Button 
-              size="lg" 
-              className="group bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-lg px-8 py-6 rounded-full shadow-lg shadow-orange-500/25 transition-all duration-300 hover:shadow-orange-500/40 hover:scale-105"
-            >
-              Написать в Telegram — @Sumaaar
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
-            </Button>
-          </a>
+          
         </motion.div>
 
         {/* Stats */}

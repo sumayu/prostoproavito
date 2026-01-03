@@ -34,26 +34,11 @@ export default function CTASection({ variant = "default" }) {
                 </span>{' '}
                 уже сегодня
               </h2>
-              <p className="text-gray-400 mb-8 max-w-xl mx-auto">
-                Единственный способ связи — Telegram. Отвечаем быстро.
-              </p>
+          
             </>
           )}
           
-          <a
-            href="https://t.me/Sumaaar"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button 
-              size="lg" 
-              className="group bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-lg px-8 py-6 rounded-full shadow-lg shadow-orange-500/25 transition-all duration-300 hover:shadow-orange-500/40 hover:scale-105"
-            >
-              <MessageCircle className="mr-2 w-5 h-5" />
-              Написать в Telegram — @Sumaaar
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </a>
+       
         </motion.div>
       </div>
     </section>

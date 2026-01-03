@@ -219,23 +219,20 @@ const handleSubmit = async (e) => {
                     required
                     className="w-full py-6 px-4 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
                   />
-               <div className="relative">
+<div className="relative">
   <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none" />
 
   <Input
     name="meetingDate"
     type="text"
-    placeholder="Удобный день для Zoom-встречи *"
+    placeholder="Удобный день для Zoom-встречи*"
     value={formData.meetingDate}
-    onFocus={(e) => (e.target.type = "date")}
-    onBlur={(e) => {
-      if (!e.target.value) e.target.type = "text";
-    }}
     onChange={handleChange}
     required
     className="w-full pl-12 py-6 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl focus:border-orange-500/50 focus:ring-orange-500/20"
   />
 </div>
+
 
                 </div>
 
@@ -268,19 +265,7 @@ const handleSubmit = async (e) => {
               <p className="text-gray-400 mb-8">
                 Для получения бесплатного разбора напишите нам в Telegram
               </p>
-              <a
-                href="https://t.me/Sumaaar"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-lg px-8 py-6 rounded-xl"
-                >
-                  Написать в Telegram — @Sumaaar
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </a>
+         
             </motion.div>
           )}
         </motion.div>

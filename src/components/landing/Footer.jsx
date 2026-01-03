@@ -22,17 +22,7 @@ export default function Footer() {
           </div>
 
           {/* Contact */}
-          <a
-            href="https://t.me/Sumaaar"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-orange-500/30 transition-colors group"
-          >
-            <MessageCircle className="w-5 h-5 text-orange-500" />
-            <span className="text-white">@Sumaaar</span>
-            <ArrowUpRight className="w-4 h-4 text-gray-500 group-hover:text-orange-500 transition-colors" />
-          </a>
-
+      
           {/* Copyright */}
           <div className="text-gray-500 text-sm text-center md:text-right">
             © {currentYear} Сервис не является официальным партнёром Авито

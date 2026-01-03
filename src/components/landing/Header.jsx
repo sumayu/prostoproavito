@@ -64,20 +64,7 @@ export default function Header() {
             </nav>
 
             {/* CTA Button - Desktop */}
-            <a
-              href="https://t.me/Sumaaar"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden md:block"
-            >
-              <Button 
-                size="sm" 
-                className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-full"
-              >
-                <MessageCircle className="w-4 h-4 mr-2" />
-                Telegram
-              </Button>
-            </a>
+          
 
             {/* Mobile Menu Button */}
             <button
