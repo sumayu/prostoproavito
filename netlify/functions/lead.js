@@ -75,7 +75,7 @@ export async function handler(event) {
     };
 
   } catch (err) {
-    console.error("LEAD ERROR:", err);
+    console.error("LEAD ERR:", err);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Internal Server Error" })
